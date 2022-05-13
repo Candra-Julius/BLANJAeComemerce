@@ -8,8 +8,8 @@ const productContoller = {
     const offset = (page - 1) * limit
     const sortby = req.query.sortby
     const search = req.query.search
-    if (search === true) {
-      productModel.search()
+    if (search) {
+      productModel.search(search)
         .then((result) => {
           res.status(200).json({
             data: result.rows
@@ -35,9 +35,9 @@ const productContoller = {
   },
   insertProduct: (req, res, next) => {
     // eslint-disable-next-line camelcase
-    const { product, price, stock, category_id } = req.body
+    const { name, price, stock, category_id } = req.body
     const data = {
-      product,
+      name,
       price,
       stock,
       // eslint-disable-next-line camelcase
@@ -47,7 +47,8 @@ const productContoller = {
       .then(() => {
         res.status(201)
         res.json({
-          message: 'input data success'
+          message: 'input data success',
+          data
         })
       })
       .catch(() => {
@@ -57,10 +58,16 @@ const productContoller = {
   updateProduct: (req, res, next) => {
     const { price, stock } = req.body
     const id = req.params.id
-    productModel.update(price, stock, id)
+    const data = {
+      price,
+      stock,
+      id
+    }
+    productModel.update(data)
       .then((result) => {
         res.json({
-          message: 'data has been updated'
+          message: 'data has been updated',
+          data
         })
       })
       .catch((error) => {

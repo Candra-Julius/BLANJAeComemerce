@@ -6,7 +6,7 @@ const categoryControler = {
     const limit = parseInt(req.query.limit) || 5
     const offset = (page - 1) * limit
     const search = req.query.search
-    if (search === true) {
+    if (search) {
       categoryModel.search(search)
         .then((result) => {
           res.status(200).json({

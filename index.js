@@ -2,13 +2,11 @@
 require('dotenv').config()
 const createError = require('http-errors')
 const express = require('express')
-const productRouters = require('./src/route/product')
-const categoryRouters = require('./src/route/category')
-const purchaseRouters = require('./src/route/purchase')
+const versioning = require('./src/route/index')
 const cors = require('cors')
 const helmet = require('helmet')
 const app = express()
-const PORT = process.env.PORT
+const PORT = process.env.PORT || 4000
 
 // middleware
 app.use(express.json())
@@ -16,9 +14,7 @@ app.use(cors())
 app.use(helmet())
 
 // routing
-app.use('/product', productRouters)
-app.use('/category', categoryRouters)
-app.use('/purchase', purchaseRouters)
+app.use('/v1', versioning)
 
 // error handling
 app.all('*', (req, res, next) => {
