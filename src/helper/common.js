@@ -12,7 +12,7 @@ const common = {
   },
   generateToken: (payload) => {
     const expiresIn = {
-      expiresIn: '30m',
+      expiresIn: '1h',
       issuer: 'blanja'
     }
     const token = jwt.sign(payload, process.env.SECRET_KEY_JWT, expiresIn)

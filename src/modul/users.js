@@ -5,13 +5,19 @@ const usersmodel = {
     return pool.query('SELECT * FROM users WHERE email = $1', [email])
   },
   insert: ({ id, fullname, role, hash, email }) => {
-    return pool.query('INSERT INTO users(id, fullname, role, password, email) VALUES($1, $2, $3, $4, $5)', [id, fullname, role, hash, email])
+    return pool.query('INSERT INTO users(id, fullname, role, password, email, status) VALUES($1, $2, $3, $4, $5, 0)', [id, fullname, role, hash, email])
   },
   delete: (id) => {
     return pool.query('DELETE FROM users WHERE id = $1', [id])
   },
   getData: () => {
-    return pool.query('SELECT id, fullname, role, email FROM users')
+    return pool.query('SELECT id, fullname, role, email, avatar, status FROM users')
+  },
+  changeAvatar: (photo, email) => {
+    return pool.query('UPDATE users SET avatar = $1 WHERE email = $2', [photo, email])
+  },
+  activation: (id) => {
+    return pool.query('UPDATE users SET status = 1 where id = $1', [id])
   }
 }
 module.exports = usersmodel
