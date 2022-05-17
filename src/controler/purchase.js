@@ -79,7 +79,8 @@ const purchaseController = {
         const qty = result.qty - 1
         await purchaseModul.updateProd(qty, id, product)
         res.status(200).json({
-          message: 'items has been updated'
+          message: 'items has been updated',
+          qty
         })
       }
     } catch (error) {

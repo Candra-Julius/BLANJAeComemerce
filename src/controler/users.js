@@ -6,6 +6,7 @@ const common = require('../helper/common')
 const validate = require('../modul/validate')
 const jwt = require('jsonwebtoken')
 const { accActivation } = require('../helper/sendEmail')
+const { generateToken, generateRefreshToken } = require('../helper/common')
 
 const usersController = {
   register: async (req, res, next) => {
@@ -123,8 +124,18 @@ const usersController = {
   },
   refreshToken: (req, res, next) => {
     const refreshToken = req.body.refreshToken
-    const payload = jwt.sign(refreshToken, process.env.SECRET_KEY_JWT)
-    console.log(payload)
+    const decoded = jwt.sign(refreshToken, process.env.SECRET_KEY_JWT)
+    const payload = {
+      email: decoded.email,
+      role: decoded.role
+    }
+    const result = {
+      token: generateToken(payload),
+      refreshToken: generateRefreshToken(payload)
+    }
+    res.status(200).json({
+      result
+    })
   },
   activation: async (req, res, next) => {
     const id = req.params.id

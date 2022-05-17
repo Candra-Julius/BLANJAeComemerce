@@ -88,8 +88,11 @@ const productContoller = {
   insertPhoto: async (req, res, next) => {
     try {
       const file = req.file
+      console.log(file)
+      const photo = file.filename
+      console.log(photo)
       const id = req.params.id
-      await productModel.insertPhoto(file, id)
+      await productModel.insertPhoto(photo, id)
       res.status(200).json({
         message: 'photo added'
       })

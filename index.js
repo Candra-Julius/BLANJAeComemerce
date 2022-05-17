@@ -5,6 +5,7 @@ const express = require('express')
 const versioning = require('./src/route/index')
 const cors = require('cors')
 const helmet = require('helmet')
+const xss = require('xss-clean')
 const app = express()
 const PORT = process.env.PORT || 4000
 
@@ -13,6 +14,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cors())
 app.use(helmet())
+app.use(xss())
 
 // routing
 app.use('/v1', versioning)

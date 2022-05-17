@@ -15,8 +15,8 @@ const productModel = {
   search: (search) => {
     return pool.query('SELECT * FROM product WHERE name ILIKE $1', [search])
   },
-  insertPhoto: (file, id) => {
-    return pool.query('UPDATE product SET photo = $1 WHERE product_id =$2', [file, id])
+  insertPhoto: (photo, id) => {
+    return pool.query('UPDATE product SET photo = $1 WHERE product_id = $2', [photo, id])
   },
   detailProduct: (id) => {
     return pool.query('SELECT * FROM product where product_id = $1', [id])
