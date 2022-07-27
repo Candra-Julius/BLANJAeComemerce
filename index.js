@@ -18,7 +18,7 @@ app.use(cors({
   preflightContinue: true,
   optionsSuccessStatus: 204
 }))
-app.use(helmet())
+app.use(helmet.crossOriginResourcePolicy({ policy: 'cross-origin' }))
 app.use(xss())
 
 // routing
