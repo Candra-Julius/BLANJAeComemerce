@@ -14,6 +14,9 @@ const categoryModel = {
   },
   search: (search) => {
     return pool.query(`SELECT * FROM category WHERE name ILIKE ('%${search}%')`)
+  },
+  getall: () => {
+    return pool.query('SELECT * FROM category')
   }
 }
 

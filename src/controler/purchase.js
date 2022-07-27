@@ -48,7 +48,7 @@ const purchaseController = {
       }
     } catch (error) {
       console.log(error)
-      next(createError[400]('gagal juga'))
+      next(createError[400]())
     }
   },
   deletePurchase: (req, res, next) => {
@@ -84,6 +84,7 @@ const purchaseController = {
         })
       }
     } catch (error) {
+      console.log(error)
       next(createError[500]())
     }
   }

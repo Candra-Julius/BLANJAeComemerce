@@ -13,6 +13,9 @@ const usersmodel = {
   getData: () => {
     return pool.query('SELECT id, fullname, role, email, avatar, status FROM users')
   },
+  updateProfile: (data) => {
+    return pool.query('UPDATE users SET fullname = $1, email= $2, gender= $3, phone= $4 WHERE id= $5', [data.fullname, data.email, data.gender, data.phone, data.id])
+  },
   changeAvatar: (photo, email) => {
     return pool.query('UPDATE users SET avatar = $1 WHERE email = $2', [photo, email])
   },

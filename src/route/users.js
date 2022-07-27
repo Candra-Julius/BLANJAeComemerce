@@ -9,8 +9,9 @@ router
   .post('/login', usersController.login)
   .post('/refreshToken', usersController.refreshToken)
   .get('/activate/:token/:id', usersController.activation)
-  .put('/profile', auth.isLogin, auth.isActive, upload.single('avatar'), usersController.profile)
-  .get('/profile', auth.isLogin, auth.isActive, usersController.profile)
+  .put('/profile', auth.isLogin, upload.single('avatar'), usersController.profile)
+  .put('/profile/edit', auth.isLogin, usersController.updateProfile)
+  .get('/profile', auth.isLogin, usersController.profile)
   .get('/', auth.isLogin, auth.isAdmin, usersController.userData)
   .delete('/:id', auth.isLogin, auth.isAdmin, usersController.delete)
 

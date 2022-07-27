@@ -8,7 +8,7 @@ const auth = {
       let token
       if (req.headers.authorization) {
         token = req.headers.authorization.split(' ')[1]
-        const decoded = jwt.verify(token, process.env.SECRET_KEY_JWT, { issuer: 'blanja' })
+        const decoded = jwt.verify(token, process.env.SECRET_KEY_JWT)
         console.log(decoded)
         req.payload = decoded
         console.log(req.payload.email)

@@ -60,9 +60,12 @@ const usersController = {
       }
       user.token = common.generateToken(payload)
       user.refreshToken = common.generateRefreshToken(payload)
+      payload.token = user.token
+      payload.refreshToken = user.refreshToken
       delete user.password
       res.status(200).json({
-        message: `wellcome back ${user.fullname}`
+        message: `wellcome back ${user.fullname}`,
+        data: payload
       })
       console.log(user)
     } catch (error) {
@@ -84,6 +87,28 @@ const usersController = {
       delete profile.password
       res.status(200).json({
         data: profile
+      })
+    } catch (error) {
+      console.log(error)
+      next(createError[500]())
+    }
+  },
+  updateProfile: async (req, res, next) => {
+    try {
+      const id = req.payload.id
+      const { fullname, gender, phone, email } = req.body
+      const data = {
+        fullname,
+        id,
+        gender,
+        phone,
+        email
+      }
+      await usersmodel.updateProfile(data)
+      console.log(data)
+      res.status(200).json({
+        message: 'data has been update',
+        data
       })
     } catch (error) {
       console.log(error)

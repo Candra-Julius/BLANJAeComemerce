@@ -7,9 +7,9 @@ const { upload } = require('../middlewares/fileHandler')
 router
   .get('/', productContoller.getProduct)
   .get('/:id', productContoller.detailProduct)
-  .post('/', isLogin, isAdmin, productContoller.insertProduct)
-  .put('/:id', isLogin, isAdmin, productContoller.updateProduct)
+  .post('/', isLogin, upload.single('photo'), productContoller.insertProduct)
+  .put('/:id', isLogin, upload.single('photo'), productContoller.updateProduct)
   .put('/upload/:id', isLogin, isAdmin, upload.single('photo'), productContoller.insertPhoto)
-  .delete('/:id', isLogin, isAdmin, productContoller.deleteProduct)
+  .delete('/:id', isLogin, productContoller.deleteProduct)
 
 module.exports = router

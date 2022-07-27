@@ -1,8 +1,8 @@
 // declaration
 require('dotenv').config()
 const createError = require('http-errors')
-const express = require('express')
 const versioning = require('./src/route/index')
+const express = require('express')
 const cors = require('cors')
 const helmet = require('helmet')
 const xss = require('xss-clean')
@@ -18,6 +18,7 @@ app.use(xss())
 
 // routing
 app.use('/v1', versioning)
+app.use('/image', express.static('./upload'))
 
 // error handling
 app.all('*', (req, res, next) => {

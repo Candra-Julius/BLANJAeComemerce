@@ -10,65 +10,84 @@ const productContoller = {
     const offset = (page - 1) * limit
     const sortby = req.query.sortby
     const search = req.query.search
-    if (search) {
-      productModel.search(search)
+    if (!search && !sortby) {
+      productModel.getall()
         .then((result) => {
           res.status(200).json({
             data: result.rows
           })
         })
-        .catch((error) => {
-          console.log(error)
-          next(new createError[500]())
-        })
     } else {
-      productModel.get({ sortby, limit, offset })
-        .then((result) => {
-          res.status(200)
-          res.json({
-            data: result.rows
+      if (search) {
+        productModel.search(search)
+          .then((result) => {
+            res.status(200).json({
+              data: result.rows
+            })
           })
-        })
-        .catch((error) => {
-          console.log(error)
-          next(new createError[500]())
-        })
+          .catch((error) => {
+            console.log(error)
+            next(new createError[500]())
+          })
+      } else {
+        productModel.get({ sortby, limit, offset })
+          .then((result) => {
+            res.status(200)
+            res.json({
+              data: result.rows
+            })
+          })
+          .catch((error) => {
+            console.log(error)
+            next(new createError[500]())
+          })
+      }
     }
   },
   insertProduct: async (req, res, next) => {
     try {
-      // const file = req.file
-      // console.log(file)
+      const file = req.file
+      console.log(file)
       // eslint-disable-next-line camelcase
-      const { name, price, stock, category_id } = req.body
+      const { name, price, stock, category_id, status, desc } = req.body
       const data = {
         id: uuidv4(),
         name,
         price,
         stock,
+        photo: `http:://localhost:4000/image/${file.filename}`,
         // eslint-disable-next-line camelcase
-        category_id
-        // photo: file.filename
+        category_id,
+        status,
+        desc
       }
       await productModel.insert(data)
       res.status(200).json({
-        message: 'items added'
+        message: 'items added',
+        data
       })
     } catch (error) {
+      console.log(error)
       next(new createError[500]())
     }
   },
   updateProduct: async (req, res, next) => {
     try {
+      const file = req.file
+      console.log(file)
+      const photo = file.filename
       const route = 'product'
-      const { price, stock } = req.body
+      const { price, stock, status, desc } = req.body
       const id = req.params.id
       const data = {
         price,
         stock,
+        photo: `http:://localhost:4000/image/${photo}`,
+        status,
+        desc,
         id
       }
-      const checkById = validating.idCheck(route, id)
+      const checkById = validating.productIdCheck(route, id)
       if (!(await checkById).rowCount) {
         res.status(400).json({
           message: 'data doesn\'t exist'
@@ -104,7 +123,7 @@ const productContoller = {
     try {
       const route = 'product'
       const id = req.params.id
-      const checkById = validating.idCheck(route, id)
+      const checkById = await validating.productIdCheck(route, id)
       if (!(await checkById).rowCount) {
         res.status(400).json({
         // eslint-disable-next-line quotes

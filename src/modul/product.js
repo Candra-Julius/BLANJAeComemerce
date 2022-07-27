@@ -3,11 +3,11 @@ const productModel = {
   delete: (id) => {
     return pool.query('DELETE FROM product WHERE product_id = $1', [id])
   },
-  update: ({ price, stock, id }) => {
-    return pool.query('UPDATE product SET price=$1, stock=$2 WHERE product_id = $3', [price, stock, id])
+  update: ({ price, stock, photo, status, desc, id }) => {
+    return pool.query('UPDATE product SET price= $1, stock= $2, photo= $3, status=$4, description=$5 WHERE product_id = $6', [price, stock, photo, status, desc, id])
   },
   insert: (data) => {
-    return pool.query('INSERT INTO product(product_id, name, price, stock, category_id)VALUES($1, $2, $3, $4, $5)', [data.id, data.name, data.price, data.stock, data.category_id])
+    return pool.query('INSERT INTO product(product_id, name, price, stock, category_id, status, description)VALUES($1, $2, $3, $4, $5, $6, $7)', [data.id, data.name, data.price, data.stock, data.category_id, data.status, data.desc])
   },
   get: ({ sortby, limit, offset }) => {
     return pool.query(`SELECT * FROM product ORDER BY ${sortby} ASC LIMIT ${limit} OFFSET ${offset}`)
@@ -20,6 +20,9 @@ const productModel = {
   },
   detailProduct: (id) => {
     return pool.query('SELECT * FROM product where product_id = $1', [id])
+  },
+  getall: () => {
+    return pool.query('SELECT * FROM product')
   }
 }
 
