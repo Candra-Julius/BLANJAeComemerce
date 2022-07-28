@@ -2,6 +2,12 @@ const createError = require('http-errors')
 const productModel = require('../modul/product')
 const validating = require('../modul/validate')
 const { v4: uuidv4 } = require('uuid')
+const cloudinary = require('cloudinary').v2
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+})
 
 const productContoller = {
   getProduct: (req, res, next) => {
@@ -48,6 +54,7 @@ const productContoller = {
     try {
       const file = req.file
       console.log(file)
+      const image = await cloudinary.uploader.upload(file.path)
       // eslint-disable-next-line camelcase
       const { name, price, stock, category_id, status, desc } = req.body
       const data = {
@@ -55,7 +62,7 @@ const productContoller = {
         name,
         price,
         stock,
-        photo: `http:://localhost:4000/image/${file.filename}`,
+        photo: image.secure_url,
         // eslint-disable-next-line camelcase
         category_id,
         status,
@@ -75,14 +82,14 @@ const productContoller = {
     try {
       const file = req.file
       console.log(file)
-      const photo = file.filename
+      const image = await cloudinary.uploader.upload(file.path)
       const route = 'product'
       const { price, stock, status, desc } = req.body
       const id = req.params.id
       const data = {
         price,
         stock,
-        photo: `http:://localhost:4000/image/${photo}`,
+        photo: image.secure_url,
         status,
         desc,
         id
@@ -108,8 +115,8 @@ const productContoller = {
     try {
       const file = req.file
       console.log(file)
-      const photo = file.filename
-      console.log(photo)
+      const image = await cloudinary.uploader.upload(file.path)
+      const photo = image.secure_url
       const id = req.params.id
       await productModel.insertPhoto(photo, id)
       res.status(200).json({

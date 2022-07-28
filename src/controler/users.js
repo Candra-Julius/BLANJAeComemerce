@@ -7,6 +7,12 @@ const validate = require('../modul/validate')
 const jwt = require('jsonwebtoken')
 const { accActivation } = require('../helper/sendEmail')
 const { generateToken, generateRefreshToken } = require('../helper/common')
+const cloudinary = require('cloudinary').v2
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+})
 
 const usersController = {
   register: async (req, res, next) => {
@@ -79,7 +85,8 @@ const usersController = {
       const file = req.file
       console.log(file)
       if (req.file) {
-        const photo = file.filename
+        const image = await cloudinary.uploader.upload(file.path)
+        const photo = image.secure_url
         console.log(photo)
         await usersmodel.changeAvatar(photo, email)
       }
