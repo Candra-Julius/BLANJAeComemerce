@@ -68,6 +68,7 @@ const productContoller = {
         status,
         desc
       }
+      console.log(data.photo)
       await productModel.insert(data)
       res.status(200).json({
         message: 'items added',
@@ -94,6 +95,7 @@ const productContoller = {
         desc,
         id
       }
+      console.log(data.photo)
       const checkById = validating.productIdCheck(route, id)
       if (!(await checkById).rowCount) {
         res.status(400).json({
