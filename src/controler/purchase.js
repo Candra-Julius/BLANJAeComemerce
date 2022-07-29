@@ -48,7 +48,7 @@ const purchaseController = {
       }
     } catch (error) {
       console.log(error)
-      next(createError[400]())
+      next(createError[500]())
     }
   },
   deletePurchase: (req, res, next) => {

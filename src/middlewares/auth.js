@@ -5,6 +5,8 @@ const { findByEmail } = require('../modul/users')
 const auth = {
   isLogin: (req, res, next) => {
     try {
+      console.log('masuk isLogin')
+      console.log(req.headers)
       let token
       if (req.headers.authorization) {
         token = req.headers.authorization.split(' ')[1]
@@ -14,13 +16,10 @@ const auth = {
         console.log(req.payload.email)
         next()
       } else {
-        next(createError[401]('you need to log in to access this feature'))
+        next(createError[502]('you need to log in to access this feature'))
       }
     } catch (error) {
       console.log(error)
-      res.json({
-        error
-      })
     }
   },
   isAdmin: (req, res, next) => {

@@ -14,7 +14,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cors({
   origin: 'http://localhost:3000',
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
   preflightContinue: true,
   optionsSuccessStatus: 204
 }))
@@ -33,6 +33,7 @@ app.all('*', (req, res, next) => {
 app.use((err, req, res, next) => {
   const messError = err.message
   const statusError = err.status
+  console.log(err)
 
   res.status(statusError).json({
     message: messError
