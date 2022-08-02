@@ -6,6 +6,9 @@ const productModel = {
   update: ({ price, stock, photo, status, desc, id }) => {
     return pool.query('UPDATE product SET price= $1, stock= $2, photo= $3, status=$4, description=$5 WHERE product_id = $6', [price, stock, photo, status, desc, id])
   },
+  updateWOFile: ({ price, stock, status, desc, id }) => {
+    return pool.query('UPDATE product SET price= $1, stock= $2, status=$3, description=$4 WHERE product_id = $5', [price, stock, status, desc, id])
+  },
   insert: (data) => {
     return pool.query('INSERT INTO product(product_id, name, price, stock, category_id, status, description, photo)VALUES($1, $2, $3, $4, $5, $6, $7, $8)', [data.id, data.name, data.price, data.stock, data.category_id, data.status, data.desc, data.photo])
   },

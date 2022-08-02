@@ -2,6 +2,7 @@ const createError = require('http-errors')
 const productModel = require('../modul/product')
 const validating = require('../modul/validate')
 const { v4: uuidv4 } = require('uuid')
+const { detailProduct } = require('../modul/product')
 const cloudinary = require('cloudinary').v2
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME,
@@ -82,31 +83,48 @@ const productContoller = {
   updateProduct: async (req, res, next) => {
     try {
       const file = req.file
-      console.log(file)
-      const image = await cloudinary.uploader.upload(file.path)
       const route = 'product'
       const { price, stock, status, desc } = req.body
       const id = req.params.id
-      const data = {
-        price,
-        stock,
-        photo: image.secure_url,
-        status,
-        desc,
-        id
-      }
-      console.log(data.photo)
       const checkById = validating.productIdCheck(route, id)
+      const datas = detailProduct(id)
       if (!(await checkById).rowCount) {
         res.status(400).json({
           message: 'data doesn\'t exist'
         })
       } else {
-        await productModel.update(data)
-        res.json({
-          message: 'data has been updated',
-          data
-        })
+        if (file) {
+          console.log(file)
+          const image = await cloudinary.uploader.upload(file.path)
+          const data = {
+            price: price || datas.price,
+            stock: stock || datas.stock,
+            photo: image.secure_url || datas.photo,
+            status: status || datas.status,
+            desc: desc || datas.description,
+            id
+          }
+          console.log(data.photo)
+          await productModel.update(data)
+          res.json({
+            message: 'data has been updated',
+            data
+          })
+        } else {
+          const data = {
+            price: price || datas.price,
+            stock: stock || datas.stock,
+            status: status || datas.status,
+            desc: desc || datas.description,
+            id
+          }
+          console.log(data.photo)
+          await productModel.updateWOFile(data)
+          res.json({
+            message: 'data has been updated',
+            data
+          })
+        }
       }
     } catch (error) {
       console.log(error)
